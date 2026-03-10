@@ -575,35 +575,32 @@ ORDER BY d.name, salary DESC
 
 ---
 
-## Window Frames — ROWS BETWEEN Reference
+## Window Frames — ROWS BETWEEN
 
-```sql
--- Frame 1: From start to current row (DEFAULT when ORDER BY present)
-ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+### Frame Cheat Sheet
 
--- Frame 2: Entire partition (DEFAULT when no ORDER BY)
-ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+| Frame | Meaning | Use case |
+|---|---|---|
+| `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` | Start to current row | Running totals (default with ORDER BY) |
+| `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` | Entire partition | LAST_VALUE, full totals |
+| `ROWS BETWEEN 2 PRECEDING AND CURRENT ROW` | Last 3 rows | 3-row moving average |
+| `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING` | Centered window | Smoothing with neighbors |
 
--- Frame 3: Custom sliding window (last 3 rows including current)
-ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+---
 
--- Frame 4: Centered window (1 before, current, 1 after)
-ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
-```
-
-### Challenge: Feel the Difference
+### Challenge 1: Feel the Difference — Default vs Full Frame
 
 Run both queries and compare output:
 
 ```sql
--- Query 1: Running total (default frame)
+-- Query 1: Running total (default frame — grows row by row)
 SELECT name, salary,
   SUM(salary) OVER (ORDER BY salary DESC
     ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
   ) AS running_total
 FROM employees ORDER BY salary DESC;
 
--- Query 2: Same total every row (full frame)
+-- Query 2: Full total every row (full frame — same number everywhere)
 SELECT name, salary,
   SUM(salary) OVER (ORDER BY salary DESC
     ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
@@ -611,4 +608,84 @@ SELECT name, salary,
 FROM employees ORDER BY salary DESC;
 ```
 
-Query 1 grows row by row. Query 2 shows `727,000` on every single row.
+**Observation:** Query 1 grows row by row. Query 2 shows `727,000` on every single row.
+
+---
+
+### Challenge 2: 3-Row Moving Average
+
+### Question
+Write a query showing each employee's `name`, `hire_date`, `salary`, and `moving_avg` —
+the average salary of the current row plus the 2 rows before it, ordered by `hire_date`.
+
+Expected output:
+
+| name  | hire_date  | salary | moving_avg |
+|-------|------------|--------|------------|
+| Eve   | 2018-11-05 | 75,000 | 75,000     |
+| Alice | 2019-01-15 | 95,000 | 85,000     |
+| Hank  | 2019-05-18 | 60,000 | 76,667     |
+| Ivy   | 2020-02-14 | 65,000 | 73,333     |
+| Bob   | 2020-03-10 | 80,000 | 68,333     |
+| Frank | 2020-07-22 | 72,000 | 72,333     |
+| Carol | 2021-06-01 | 80,000 | 77,333     |
+| Grace | 2021-12-01 | 68,000 | 73,333     |
+| Dave  | 2022-09-20 | 70,000 | 72,667     |
+| Jack  | 2023-01-10 | 62,000 | 66,667     |
+
+Notice:
+- Eve has only herself → `moving_avg = 75,000` (only 1 row available)
+- Alice has Eve + herself → `moving_avg = 85,000` (only 2 rows available)
+- From Hank onwards — always 3 rows included
+
+### Answer
+
+```sql
+SELECT name, hire_date, salary,
+  ROUND(AVG(salary) OVER w, 0) AS moving_avg
+FROM employees
+WINDOW w AS (ORDER BY hire_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
+```
+
+**Rails:**
+```ruby
+Employee
+  .select(
+    "name",
+    "hire_date",
+    "salary",
+    Arel.sql("ROUND(AVG(salary) OVER (ORDER BY hire_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW), 0) AS moving_avg")
+  )
+  .order("hire_date")
+  .each { |e| puts "#{e.name} | #{e.hire_date} | #{e.salary} | #{e.moving_avg}" }
+```
+
+**Key lessons:**
+- The frame clause goes **inside** the window definition, after `ORDER BY`
+- When fewer than N rows exist before current row, SQL uses however many are available — no errors
+- `AVG()` and `SUM()/COUNT()` produce identical results — `AVG()` is cleaner
+- Named window `w` can include the frame: `WINDOW w AS (ORDER BY ... ROWS BETWEEN ...)`
+
+---
+
+## Complete Progress Tracker
+
+| Concept | Status |
+|---|---|
+| Basic `OVER ()` — entire table as window | ✅ |
+| `PARTITION BY` — correct column to group on | ✅ |
+| All aggregates work as window functions | ✅ |
+| Named windows `WINDOW w AS (...)` | ✅ |
+| `ORDER BY` inside OVER changes frame, not just sort | ✅ |
+| Running totals with `ORDER BY` inside OVER | ✅ |
+| `ROW_NUMBER`, `RANK`, `DENSE_RANK` differences | ✅ |
+| Subquery pattern to filter window function results | ✅ |
+| `NTILE(n)` — bucketing into equal groups | ✅ |
+| `LAG` / `LEAD` — always need `ORDER BY` | ✅ |
+| `FIRST_VALUE` works with default frame | ✅ |
+| `LAST_VALUE` needs explicit full frame | ✅ |
+| `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` | ✅ |
+| `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` | ✅ |
+| Custom sliding frame `N PRECEDING AND CURRENT ROW` | ✅ |
+| `AS` keyword is optional for aliases | ✅ |
+| Choosing ORDER BY column based on business logic | ⚠️ (improving) |
