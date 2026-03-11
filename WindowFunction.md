@@ -1,5 +1,44 @@
 # Window Functions — Practice Challenges
 
+# Window Functions — Topics Covered
+
+## Core Concepts
+1. `OVER ()` — entire table as window
+2. `PARTITION BY` — group rows without collapsing
+3. `SUM`, `AVG`, `COUNT` as window functions
+4. Named windows — `WINDOW w AS (...)`
+5. `ORDER BY` inside `OVER` — changes frame, not just display order
+
+## Running Totals
+6. Running totals — cumulative sum by hire date
+7. Running totals per department — `PARTITION BY` + `ORDER BY` combined
+
+## Ranking Functions
+8. `ROW_NUMBER` — always unique ranking
+9. `RANK` — ties get same rank, next rank skips
+10. `DENSE_RANK` — ties get same rank, next rank doesn't skip
+11. Subquery pattern — filtering on window function results
+
+## Bucketing
+12. `NTILE(n)` — dividing rows into equal buckets
+
+## Navigation Functions
+13. `LAG` — look at previous row's value
+14. `LEAD` — look at next row's value
+15. `LAG` / `LEAD` with `PARTITION BY` — resets per group
+16. `FIRST_VALUE` — anchor to first row of window
+17. `LAST_VALUE` — anchor to last row, always needs explicit frame
+
+## Window Frames
+18. `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` — running total (default)
+19. `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` — full partition
+20. `ROWS BETWEEN N PRECEDING AND CURRENT ROW` — moving average
+
+## SQL & Rails
+21. `AS` keyword is optional for aliases
+22. Rails — `Arel.sql()` for window functions in ActiveRecord
+23. Rails — subquery pattern with `.from()`
+
 ## Setup
 
 ```bash
