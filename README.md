@@ -1,221 +1,84 @@
-# 🗺️ Complete SQL LeetCode Roadmap (Pattern-Based)
+# 🗺️ SQL LeetCode Roadmap
 
-> **Goal:** Build strong SQL fundamentals, master every major interview pattern, and gain enough repetition to solve complex SQL problems confidently.
->
-> **Recommended SQL Dialect:** MySQL 8+, PostgreSQL, or SQL Server (all support modern window functions and CTEs).
-
----
-
-# 📚 Phase 0 — SQL Fundamentals
-
-Master these concepts before starting LeetCode.
-
-## Core Querying
-
-* [ ] SELECT
-* [ ] DISTINCT
-* [ ] WHERE
-* [ ] ORDER BY
-* [ ] LIMIT
-* [ ] OFFSET
-* [ ] ALIAS (AS)
-
-## Filtering
-
-* [ ] IN
-* [ ] NOT IN
-* [ ] EXISTS
-* [ ] NOT EXISTS
-* [ ] BETWEEN
-* [ ] LIKE
-* [ ] REGEXP / SIMILAR TO
-
-## NULL Handling
-
-* [ ] IS NULL
-* [ ] IS NOT NULL
-* [ ] IFNULL()
-* [ ] COALESCE()
-
-## Conditional Logic
-
-* [ ] CASE WHEN
-* [ ] IF()
-
-## String Functions
-
-* [ ] CONCAT()
-* [ ] SUBSTRING()
-* [ ] LENGTH()
-* [ ] UPPER()
-* [ ] LOWER()
-* [ ] REPLACE()
-* [ ] TRIM()
-
-## Date Functions
-
-* [ ] DATE()
-* [ ] YEAR()
-* [ ] MONTH()
-* [ ] DAY()
-* [ ] DATEDIFF()
-* [ ] DATE_ADD()
-* [ ] DATE_SUB()
-
-## Aggregation
-
-* [ ] COUNT()
-* [ ] SUM()
-* [ ] AVG()
-* [ ] MIN()
-* [ ] MAX()
-* [ ] GROUP BY
-* [ ] HAVING()
+> **Goal:** Master all core SQL patterns through two structured phases.
+> Check off each problem as you complete it!
 
 ---
 
-# 📦 Phase 1 — Core SQL Patterns
+## 📦 Phase 1 — Core Pattern Building
+
+### 🟢 Easy
+
+* [x] 175 — Combine Two Tables *(LEFT JOIN)*
+* [ ] 176 — Second Highest Salary *(LIMIT / OFFSET)*
+* [ ] 181 — Employees Earning More Than Their Managers *(Self JOIN)*
+* [ ] 182 — Duplicate Emails *(GROUP BY + HAVING)*
+* [ ] 183 — Customers Who Never Order *(LEFT JOIN / NOT IN)*
+* [ ] 196 — Delete Duplicate Emails *(DELETE + self JOIN)*
+* [ ] 197 — Rising Temperature *(Self JOIN / DATEDIFF)*
+* [ ] 511 — Game Play Analysis I *(MIN with GROUP BY)*
+* [ ] 512 — Game Play Analysis II *(Subquery)*
+* [ ] 577 — Employee Bonus *(LEFT JOIN)*
+* [x] 584 — Find Customer Referee *(WHERE / NULL check)*
+* [ ] 586 — Customer Placing the Largest Number of Orders *(GROUP BY + ORDER BY)*
+* [x] 595 — Big Countries *(WHERE conditions)*
+* [ ] 596 — Classes More Than 5 Students *(GROUP BY + HAVING)*
+* [ ] 607 — Sales Person *(NOT IN / Subquery)*
+* [ ] 620 — Not Boring Movies *(WHERE + MOD)*
+* [ ] 627 — Swap Salary *(CASE WHEN / UPDATE)*
+* [ ] 1050 — Actors and Directors Who Cooperated *(GROUP BY + HAVING)*
+* [ ] 1084 — Sales Analysis III *(Date filtering)*
+* [ ] 1179 — Reformat Department Table *(CASE WHEN pivot)*
 
 ---
 
-# Pattern 1 — Basic SELECT & Filtering
+### 🟡 Medium
 
-### Easy
-- **✅ 595 — Big Countries**
-- **584 — Find Customer Referee**
-- **620 — Not Boring Movies**
-- **1757 — Recyclable and Low Fat Products**
-- **1527 — Patients With a Condition**
-- **1821 — Find Customers With Positive Revenue This Year**
-
----
-
-# Pattern 2 — Aggregation & GROUP BY
-
-### Easy
-
-* [ ] 182 — Duplicate Emails
-* [ ] 596 — Classes More Than 5 Students
-* [ ] 586 — Customer Placing the Largest Number of Orders
-* [ ] 1729 — Find Followers Count
-* [ ] 1693 — Daily Leads and Partners
-* [ ] 2356 — Number of Unique Subjects Taught by Each Teacher
-
-### Medium
-
-* [ ] 570 — Managers with at Least 5 Direct Reports
-* [ ] 1045 — Customers Who Bought All Products
-* [ ] 1355 — Activity Participants
+* [ ] 180 — Consecutive Numbers *(Self JOIN / LAG)*
+* [ ] 184 — Department Highest Salary *(Subquery + JOIN)*
+* [ ] 534 — Game Play Analysis III *(Running total / SUM OVER)*
+* [ ] 550 — Game Play Analysis IV *(Window functions)*
+* [ ] 570 — Managers with at Least 5 Direct Reports *(GROUP BY + HAVING)*
+* [ ] 574 — Winning Candidate *(JOIN + GROUP BY)*
+* [ ] 580 — Count Student Number in Departments *(LEFT JOIN + COUNT)*
+* [ ] 602 — Friend Requests II: Who Has the Most Friends *(UNION ALL)*
+* [ ] 608 — Tree Node *(CASE WHEN)*
+* [ ] 612 — Shortest Distance in a Plane *(SQRT / POWER)*
+* [ ] 614 — Second Degree Follower *(Self JOIN)*
+* [ ] 626 — Exchange Seats *(CASE WHEN + MOD)*
+* [ ] 1045 — Customers Who Bought All Products *(GROUP BY + HAVING COUNT)*
+* [ ] 1070 — Product Sales Analysis III *(Subquery)*
+* [ ] 1126 — Active Businesses *(Window AVG)*
+* [ ] 1158 — Market Analysis I *(LEFT JOIN + conditional)*
+* [ ] 1164 — Product Price at a Given Date *(Subquery)*
+* [ ] 1193 — Monthly Transactions I *(GROUP BY + SUM CASE)*
+* [ ] 1204 — Last Person to Fit in the Bus *(Running SUM)*
+* [ ] 1321 — Restaurant Growth *(Window SUM OVER)*
 
 ---
 
-# Pattern 3 — JOIN Fundamentals
+### 🔴 Hard
 
-### Easy
-
-* [ ] 175 — Combine Two Tables
-* [ ] 577 — Employee Bonus
-* [ ] 1378 — Replace Employee ID With The Unique Identifier
-* [ ] 1407 — Top Travellers
-* [ ] 1581 — Customer Who Visited but Did Not Make Any Transactions
-
-### Medium
-
-* [ ] 580 — Count Student Number in Departments
-* [ ] 1077 — Project Employees III
-* [ ] 1098 — Unpopular Books
-
----
-
-# Pattern 4 — Self JOIN
-
-### Easy
-
-* [ ] 181 — Employees Earning More Than Their Managers
-* [ ] 197 — Rising Temperature
-
-### Medium
-
-* [ ] 180 — Consecutive Numbers
-* [ ] 614 — Second Degree Follower
-* [ ] 1149 — Article Views II
-* [ ] 1264 — Page Recommendations
-
----
-
-# Pattern 5 — Subqueries
-
-### Easy
-
-* [ ] 176 — Second Highest Salary
-* [ ] 512 — Game Play Analysis II
-* [ ] 607 — Sales Person
-
-### Medium
-
-* [ ] 184 — Department Highest Salary
-* [ ] 1070 — Product Sales Analysis III
-* [ ] 1164 — Product Price at a Given Date
-* [ ] 1107 — New Users Daily Count
-
----
-
-# Pattern 6 — CASE WHEN
-
-### Easy
-
-* [ ] 627 — Swap Salary
-* [ ] 1179 — Reformat Department Table
-* [ ] 1873 — Calculate Special Bonus
-
-### Medium
-
-* [ ] 608 — Tree Node
-* [ ] 1174 — Immediate Food Delivery II
-* [ ] 1393 — Capital Gain/Loss
-
----
-
-# Pattern 7 — Date & Time Problems
-
-### Easy
-
-* [ ] 1084 — Sales Analysis III
-* [ ] 1890 — The Latest Login in 2020
-
-### Medium
-
-* [ ] 1454 — Active Users
-* [ ] 1107 — New Users Daily Count
-
----
-
-# Pattern 8 — Window Functions
-
-## Learn First
-
-* [ ] ROW_NUMBER()
-* [ ] RANK()
-* [ ] DENSE_RANK()
-* [ ] LAG()
-* [ ] LEAD()
-* [ ] FIRST_VALUE()
-* [ ] LAST_VALUE()
-* [ ] SUM() OVER()
-* [ ] AVG() OVER()
-
-### Medium
-
-* [ ] 534 — Game Play Analysis III
-* [ ] 550 — Game Play Analysis IV
-* [ ] 1321 — Restaurant Growth
-* [ ] 1303 — Find the Team Size
-
-### Hard
-
-* [ ] 615 — Average Salary: Departments vs Company
-* [ ] 1369 — Get the Second Most Recent Activity
-* [ ] 1308 — Running Total for Different Genders
+* [ ] 185 — Department Top Three Salaries *(DENSE_RANK)*
+* [ ] 262 — Trips and Users *(Multiple JOINs + rate calc)*
+* [ ] 569 — Median Employee Salary *(ROW_NUMBER / self JOIN)*
+* [ ] 571 — Find Median Given Frequency *(Complex median logic)*
+* [ ] 579 — Find Cumulative Salary of an Employee *(Self JOIN + CASE)*
+* [ ] 601 — Human Traffic of Stadium *(Gaps & Islands)*
+* [ ] 615 — Average Salary: Departments vs Company *(Window AVG)*
+* [ ] 618 — Students Report by Geography *(Pivoting with variables)*
+* [ ] 1097 — Game Play Analysis V *(Complex retention)*
+* [ ] 1127 — User Purchase Platform *(UNION + conditional pivot)*
+* [ ] 1159 — Market Analysis II *(ROW_NUMBER + ranking)*
+* [ ] 1194 — Tournament Winners *(UNION ALL + MAX)*
+* [ ] 1225 — Report Contiguous Dates *(Gaps & Islands)*
+* [ ] 1336 — Number of Transactions per Visit *(Recursive CTE)*
+* [ ] 1369 — Get the Second Most Recent Activity *(ROW_NUMBER)*
+* [ ] 1384 — Total Sales Amount by Year *(Recursive date expansion)*
+* [ ] 1412 — Find the Quiet Students *(RANK + subquery)*
+* [ ] 1479 — Sales by Day of the Week *(Pivot with CASE)*
+* [ ] 1917 — Leetcodify Friends Recommendations *(Complex multi-JOIN)*
+* [ ] 2252 — Dynamic Pivoting of a Table *(Dynamic SQL)*
 
 ---
 
