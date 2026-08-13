@@ -1,8 +1,6 @@
 -- 175. Combine Two Tables
 
 /*
-SQL Schema
-Pandas Schema
 Table: Person
 
 +-------------+---------+
