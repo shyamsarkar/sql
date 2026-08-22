@@ -13,7 +13,7 @@
 * [x] 176 — Second Highest Salary *(LIMIT / OFFSET)*
 * [x] 181 — Employees Earning More Than Their Managers *(Self JOIN)*
 * [x] 182 — Duplicate Emails *(GROUP BY + HAVING)*
-* [ ] 183 — Customers Who Never Order *(LEFT JOIN / NOT IN)*
+* [x] 183 — Customers Who Never Order *(LEFT JOIN / NOT IN)*
 * [ ] 196 — Delete Duplicate Emails *(DELETE + self JOIN)*
 * [ ] 197 — Rising Temperature *(Self JOIN / DATEDIFF)*
 * [ ] 511 — Game Play Analysis I *(MIN with GROUP BY)*
