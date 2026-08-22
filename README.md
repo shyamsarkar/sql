@@ -12,7 +12,7 @@
 * [x] 175 — Combine Two Tables *(LEFT JOIN)*
 * [x] 176 — Second Highest Salary *(LIMIT / OFFSET)*
 * [x] 181 — Employees Earning More Than Their Managers *(Self JOIN)*
-* [ ] 182 — Duplicate Emails *(GROUP BY + HAVING)*
+* [x] 182 — Duplicate Emails *(GROUP BY + HAVING)*
 * [ ] 183 — Customers Who Never Order *(LEFT JOIN / NOT IN)*
 * [ ] 196 — Delete Duplicate Emails *(DELETE + self JOIN)*
 * [ ] 197 — Rising Temperature *(Self JOIN / DATEDIFF)*
