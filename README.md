@@ -15,7 +15,7 @@
 * [x] 182 — Duplicate Emails *(GROUP BY + HAVING)*
 * [x] 183 — Customers Who Never Order *(LEFT JOIN / NOT IN)*
 * [x] 196 — Delete Duplicate Emails *(DELETE + self JOIN)*
-* [ ] 197 — Rising Temperature *(Self JOIN / DATEDIFF)*
+* [x] 197 — Rising Temperature *(Self JOIN / DATEDIFF)*
 * [ ] 511 — Game Play Analysis I *(MIN with GROUP BY)*
 * [ ] 512 — Game Play Analysis II *(Subquery)*
 * [ ] 577 — Employee Bonus *(LEFT JOIN)*
