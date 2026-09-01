@@ -1,0 +1,7 @@
+-- FROM / JOIN — build the row set
+-- WHERE — filter individual rows
+-- GROUP BY — form groups
+-- Aggregate functions (COUNT, SUM, AVG, …) — collapse each group into one value
+-- HAVING — filter the grouped results
+-- SELECT — project columns
+-- ORDER BY / LIMIT
