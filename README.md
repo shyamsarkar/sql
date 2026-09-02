@@ -18,7 +18,7 @@
 * [x] 197 — Rising Temperature *(Self JOIN / DATEDIFF)*
 * [x] 511 — Game Play Analysis I *(MIN with GROUP BY)*
 * [x] 512 — Game Play Analysis II *(Subquery)*
-* [ ] 577 — Employee Bonus *(LEFT JOIN)*
+* [x] 577 — Employee Bonus *(LEFT JOIN)*
 * [x] 584 — Find Customer Referee *(WHERE / NULL check)*
 * [ ] 586 — Customer Placing the Largest Number of Orders *(GROUP BY + ORDER BY)*
 * [x] 595 — Big Countries *(WHERE conditions)*
