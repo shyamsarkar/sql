@@ -22,7 +22,7 @@
 * [x] 584 — Find Customer Referee *(WHERE / NULL check)*
 * [x] 586 — Customer Placing the Largest Number of Orders *(GROUP BY + ORDER BY)*
 * [x] 595 — Big Countries *(WHERE conditions)*
-* [ ] 596 — Classes More Than 5 Students *(GROUP BY + HAVING)*
+* [x] 596 — Classes More Than 5 Students *(GROUP BY + HAVING)*
 * [ ] 607 — Sales Person *(NOT IN / Subquery)*
 * [ ] 620 — Not Boring Movies *(WHERE + MOD)*
 * [ ] 627 — Swap Salary *(CASE WHEN / UPDATE)*
