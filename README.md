@@ -25,7 +25,7 @@
 * [x] 596 — Classes More Than 5 Students *(GROUP BY + HAVING)*
 * [x] 607 — Sales Person *(NOT IN / Subquery)*
 * [x] 620 — Not Boring Movies *(WHERE + MOD)*
-* [ ] 627 — Swap Salary *(CASE WHEN / UPDATE)*
+* [x] 627 — Swap Salary *(CASE WHEN / UPDATE)*
 * [ ] 1050 — Actors and Directors Who Cooperated *(GROUP BY + HAVING)*
 * [ ] 1084 — Sales Analysis III *(Date filtering)*
 * [ ] 1179 — Reformat Department Table *(CASE WHEN pivot)*
