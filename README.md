@@ -28,7 +28,7 @@
 * [x] 627 — Swap Salary *(CASE WHEN / UPDATE)*
 * [x] 1050 — Actors and Directors Who Cooperated *(GROUP BY + HAVING)*
 * [x] 1084 — Sales Analysis III *(Date filtering)*
-* [ ] 1179 — Reformat Department Table *(CASE WHEN pivot)*
+* [x] 1179 — Reformat Department Table *(CASE WHEN pivot)*
 
 ---
 
