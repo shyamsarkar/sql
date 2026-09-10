@@ -35,7 +35,7 @@
 ### 🟡 Medium
 
 * [x] 180 — Consecutive Numbers *(Self JOIN / LAG)*
-* [ ] 184 — Department Highest Salary *(Subquery + JOIN)*
+* [x] 184 — Department Highest Salary *(Subquery + JOIN)*
 * [ ] 534 — Game Play Analysis III *(Running total / SUM OVER)*
 * [ ] 550 — Game Play Analysis IV *(Window functions)*
 * [ ] 570 — Managers with at Least 5 Direct Reports *(GROUP BY + HAVING)*
