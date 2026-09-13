@@ -37,7 +37,7 @@
 * [x] 180 — Consecutive Numbers *(Self JOIN / LAG)*
 * [x] 184 — Department Highest Salary *(Subquery + JOIN)*
 * [x] 534 — Game Play Analysis III *(Running total / SUM OVER)*
-* [ ] 550 — Game Play Analysis IV *(Window functions)*
+* [x] 550 — Game Play Analysis IV *(Window functions / Subquery+LEFT JOIN)*
 * [ ] 570 — Managers with at Least 5 Direct Reports *(GROUP BY + HAVING)*
 * [ ] 574 — Winning Candidate *(JOIN + GROUP BY)*
 * [ ] 580 — Count Student Number in Departments *(LEFT JOIN + COUNT)*
