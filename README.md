@@ -38,7 +38,7 @@
 * [x] 184 — Department Highest Salary *(Subquery + JOIN)*
 * [x] 534 — Game Play Analysis III *(Running total / SUM OVER)*
 * [x] 550 — Game Play Analysis IV *(Window functions / Subquery+LEFT JOIN)*
-* [ ] 570 — Managers with at Least 5 Direct Reports *(GROUP BY + HAVING)*
+* [x] 570 — Managers with at Least 5 Direct Reports *(GROUP BY + HAVING)*
 * [ ] 574 — Winning Candidate *(JOIN + GROUP BY)*
 * [ ] 580 — Count Student Number in Departments *(LEFT JOIN + COUNT)*
 * [ ] 602 — Friend Requests II: Who Has the Most Friends *(UNION ALL)*
