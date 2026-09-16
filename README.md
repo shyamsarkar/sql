@@ -40,7 +40,7 @@
 * [x] 550 — Game Play Analysis IV *(Window functions / Subquery+LEFT JOIN)*
 * [x] 570 — Managers with at Least 5 Direct Reports *(GROUP BY + HAVING)*
 * [x] 574 — Winning Candidate *(JOIN + GROUP BY)*
-* [ ] 580 — Count Student Number in Departments *(LEFT JOIN + COUNT)*
+* [x] 580 — Count Student Number in Departments *(LEFT JOIN + COUNT)*
 * [ ] 602 — Friend Requests II: Who Has the Most Friends *(UNION ALL)*
 * [ ] 608 — Tree Node *(CASE WHEN)*
 * [ ] 612 — Shortest Distance in a Plane *(SQRT / POWER)*
