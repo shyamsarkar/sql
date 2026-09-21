@@ -42,7 +42,7 @@
 * [x] 574 — Winning Candidate *(JOIN + GROUP BY)*
 * [x] 580 — Count Student Number in Departments *(LEFT JOIN + COUNT)*
 * [x] 602 — Friend Requests II: Who Has the Most Friends *(UNION ALL)*
-* [ ] 608 — Tree Node *(CASE WHEN)*
+* [x] 608 — Tree Node *(CASE WHEN)*
 * [ ] 612 — Shortest Distance in a Plane *(SQRT / POWER)*
 * [ ] 614 — Second Degree Follower *(Self JOIN)*
 * [ ] 626 — Exchange Seats *(CASE WHEN + MOD)*
