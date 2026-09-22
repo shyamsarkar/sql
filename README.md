@@ -43,7 +43,7 @@
 * [x] 580 — Count Student Number in Departments *(LEFT JOIN + COUNT)*
 * [x] 602 — Friend Requests II: Who Has the Most Friends *(UNION ALL)*
 * [x] 608 — Tree Node *(CASE WHEN)*
-* [ ] 612 — Shortest Distance in a Plane *(SQRT / POWER)*
+* [x] 612 — Shortest Distance in a Plane *(SQRT / POWER)*
 * [ ] 614 — Second Degree Follower *(Self JOIN)*
 * [ ] 626 — Exchange Seats *(CASE WHEN + MOD)*
 * [ ] 1045 — Customers Who Bought All Products *(GROUP BY + HAVING COUNT)*
