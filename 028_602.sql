@@ -66,6 +66,20 @@ GROUP BY id
 ORDER BY num DESC
 LIMIT 1;
 
+-- alternative with CTE
+
+WITH unioun AS (
+    SELECT requester_id AS id FROM RequestAccepted
+    UNION ALL
+    SELECT accepter_id AS id FROM RequestAccepted
+)
+
+SELECT id, COUNT(*) AS num
+FROM unioun
+GROUP BY id
+ORDER BY num DESC
+LIMIT 1
+
 -- Tier 2 — Window function (the follow-up answer)
 WITH counts AS (
     SELECT id, COUNT(*) AS num
@@ -82,14 +96,3 @@ FROM (
     FROM counts
 ) AS ranked
 WHERE rnk = 1;
-
-
--- Tier 3 — Postgres DISTINCT ON (idiomatic, DB-specific)
-SELECT DISTINCT ON (num) id, num
-FROM (
-    SELECT requester_id AS id FROM requestaccepted
-    UNION ALL
-    SELECT accepter_id FROM requestaccepted
-) AS t
-GROUP BY id
-ORDER BY num DESC;

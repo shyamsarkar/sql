@@ -46,7 +46,7 @@
 * [x] 612 — Shortest Distance in a Plane *(SQRT / POWER)*
 * [x] 614 — Second Degree Follower *(Self JOIN)*
 * [x] 626 — Exchange Seats *(CASE WHEN + MOD)*
-* [ ] 1045 — Customers Who Bought All Products *(GROUP BY + HAVING COUNT)*
+* [x] 1045 — Customers Who Bought All Products *(GROUP BY + HAVING COUNT)*
 * [ ] 1070 — Product Sales Analysis III *(Subquery)*
 * [ ] 1126 — Active Businesses *(Window AVG)*
 * [ ] 1158 — Market Analysis I *(LEFT JOIN + conditional)*
