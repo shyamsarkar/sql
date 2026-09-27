@@ -47,7 +47,7 @@
 * [x] 614 — Second Degree Follower *(Self JOIN)*
 * [x] 626 — Exchange Seats *(CASE WHEN + MOD)*
 * [x] 1045 — Customers Who Bought All Products *(GROUP BY + HAVING COUNT)*
-* [ ] 1070 — Product Sales Analysis III *(Subquery)*
+* [x] 1070 — Product Sales Analysis III *(Subquery)*
 * [ ] 1126 — Active Businesses *(Window AVG)*
 * [ ] 1158 — Market Analysis I *(LEFT JOIN + conditional)*
 * [ ] 1164 — Product Price at a Given Date *(Subquery)*
