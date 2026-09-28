@@ -48,7 +48,7 @@
 * [x] 626 — Exchange Seats *(CASE WHEN + MOD)*
 * [x] 1045 — Customers Who Bought All Products *(GROUP BY + HAVING COUNT)*
 * [x] 1070 — Product Sales Analysis III *(Subquery)*
-* [ ] 1126 — Active Businesses *(Window AVG)*
+* [x] 1126 — Active Businesses *(Window AVG)*
 * [ ] 1158 — Market Analysis I *(LEFT JOIN + conditional)*
 * [ ] 1164 — Product Price at a Given Date *(Subquery)*
 * [ ] 1193 — Monthly Transactions I *(GROUP BY + SUM CASE)*
