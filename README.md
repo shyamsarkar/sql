@@ -51,7 +51,7 @@
 * [x] 1126 — Active Businesses *(Window AVG)*
 * [x] 1158 — Market Analysis I *(LEFT JOIN + conditional)*
 * [x] 1164 — Product Price at a Given Date *(Subquery)*
-* [ ] 1193 — Monthly Transactions I *(GROUP BY + SUM CASE)*
+* [x] 1193 — Monthly Transactions I *(GROUP BY + SUM CASE)*
 * [ ] 1204 — Last Person to Fit in the Bus *(Running SUM)*
 * [ ] 1321 — Restaurant Growth *(Window SUM OVER)*
 
