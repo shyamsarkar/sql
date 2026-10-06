@@ -1,6 +1,4 @@
-# Window Functions — Practice Challenges
-
-# Window Functions — Topics Covered
+# Window Functions — Practice Challenges & Topics Covered
 
 ## Core Concepts
 1. `OVER ()` — entire table as window
@@ -32,12 +30,15 @@
 ## Window Frames
 18. `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` — running total (default)
 19. `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` — full partition
-20. `ROWS BETWEEN N PRECEDING AND CURRENT ROW` — moving average
+20. `ROWS BETWEEN N PRECEDING AND CURRENT ROW` — moving average (lookback)
+21. `ROWS BETWEEN CURRENT ROW AND N FOLLOWING` — forward-looking lookahead
+22. `ROWS BETWEEN N PRECEDING AND N FOLLOWING` — centered smoothing window
+23. `ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING` — reverse running / remaining total
 
 ## SQL & Rails
-21. `AS` keyword is optional for aliases
-22. Rails — `Arel.sql()` for window functions in ActiveRecord
-23. Rails — subquery pattern with `.from()`
+24. `AS` keyword is optional for aliases
+25. Rails — `Arel.sql()` for window functions in ActiveRecord
+26. Rails — subquery pattern with `.from()`
 
 ## Setup
 
@@ -616,14 +617,135 @@ ORDER BY d.name, salary DESC
 
 ## Window Frames — ROWS BETWEEN
 
-### Frame Cheat Sheet
+A window frame specifies the **subset of rows** inside the partition that the window function can see for the current row.
 
-| Frame | Meaning | Use case |
+```sql
+ROWS BETWEEN <frame_start> AND <frame_end>
+```
+
+### Boundary Options
+
+| Boundary | Meaning |
+|---|---|
+| `UNBOUNDED PRECEDING` | The very first row of the partition |
+| `n PRECEDING` | `n` rows before the current row |
+| `CURRENT ROW` | The row currently being evaluated |
+| `n FOLLOWING` | `n` rows after the current row |
+| `UNBOUNDED FOLLOWING` | The very last row of the partition |
+
+---
+
+### The Intuitive Mental Model: Visualizing Frame Boundaries (100–700 Example)
+
+Consider a simple sequence of amounts where you can easily verify the calculations mentally:
+
+```text
+id | amount
+---+-------
+1  | 100
+2  | 200
+3  | 300
+4  | 400
+5  | 500
+6  | 600
+7  | 700
+```
+
+#### Frame Cheat Sheet
+
+| Frame Clause | Window Range | Description & Use Case |
 |---|---|---|
-| `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` | Start to current row | Running totals (default with ORDER BY) |
-| `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` | Entire partition | LAST_VALUE, full totals |
-| `ROWS BETWEEN 2 PRECEDING AND CURRENT ROW` | Last 3 rows | 3-row moving average |
-| `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING` | Centered window | Smoothing with neighbors |
+| `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` | Start → Current Row | **Running total** (cumulative sum, default with `ORDER BY`) |
+| `ROWS BETWEEN 2 PRECEDING AND CURRENT ROW` | Previous 2 + Current Row | **Lookback / Moving aggregate** (last 3 rows) |
+| `ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING` | Current Row + Next 2 | **Lookahead / Forward window** (next 3 rows, forecasting) |
+| `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING` | Previous 1 + Current + Next 1 | **Centered window** (3-row neighbor smoothing) |
+| `ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING` | Previous 2 + Current + Next 2 | **Wide centered window** (5-row smoothing) |
+| `ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING` | Current Row → End | **Reverse running total** (remaining sum / suffix sum) |
+| `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` | Entire partition | **Full partition** (fixed total on every row, required for `LAST_VALUE`) |
+
+---
+
+### Side-by-Side Comparison Query
+
+You can copy and run this query directly in PostgreSQL, MySQL 8+, SQLite 3.25+, or SQL Server:
+
+```sql
+WITH sales(id, amount) AS (
+  VALUES
+    (1, 100),
+    (2, 200),
+    (3, 300),
+    (4, 400),
+    (5, 500),
+    (6, 600),
+    (7, 700)
+)
+SELECT
+  id,
+  amount,
+  SUM(amount) OVER (ORDER BY id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)         AS running_total,
+  SUM(amount) OVER (ORDER BY id ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)                 AS prev_2_and_curr,
+  SUM(amount) OVER (ORDER BY id ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING)                 AS curr_and_next_2,
+  SUM(amount) OVER (ORDER BY id ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)                 AS centered_3,
+  SUM(amount) OVER (ORDER BY id ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING)                 AS centered_5,
+  SUM(amount) OVER (ORDER BY id ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING)         AS remaining_total,
+  SUM(amount) OVER (ORDER BY id ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS full_partition
+FROM sales
+ORDER BY id;
+```
+
+#### Query Output & Row Breakdown
+
+| id | amount | running_total | prev_2_and_curr | curr_and_next_2 | centered_3 | centered_5 | remaining_total | full_partition |
+|:--:|:------:|:-------------:|:---------------:|:---------------:|:----------:|:----------:|:---------------:|:--------------:|
+| 1  | 100    | 100           | 100             | 600             | 300        | 600        | 2800            | 2800           |
+| 2  | 200    | 300           | 300             | 900             | 600        | 1000       | 2700            | 2800           |
+| 3  | 300    | 600           | 600             | 1200            | 900        | 1500       | 2500            | 2800           |
+| 4  | 400    | 1000          | 900             | 1500            | 1200       | 2000       | 2200            | 2800           |
+| 5  | 500    | 1500          | 1200            | 1800            | 1500       | 2500       | 1800            | 2800           |
+| 6  | 600    | 2100          | 1500            | 1300            | 1800       | 2200       | 1300            | 2800           |
+| 7  | 700    | 2800          | 1800            | 700             | 1300       | 1800       | 700             | 2800           |
+
+#### How Each Cell is Calculated
+
+- **`running_total` (Cumulative sum from start):**
+  - Row 1: `100`
+  - Row 2: `100 + 200 = 300`
+  - Row 3: `100 + 200 + 300 = 600`
+  - ... Row 7: `100 + ... + 700 = 2800`
+- **`prev_2_and_curr` (Lookback 2 rows + current row):**
+  - Row 1: `100` *(no prior rows available; SQL includes whatever is present)*
+  - Row 2: `100 + 200 = 300` *(only 1 prior row available)*
+  - Row 3: `100 + 200 + 300 = 600`
+  - Row 4: `200 + 300 + 400 = 900`
+  - Row 5: `300 + 400 + 500 = 1200`
+  - Row 6: `400 + 500 + 600 = 1500`
+  - Row 7: `500 + 600 + 700 = 1800`
+- **`curr_and_next_2` (Current row + lookahead 2 rows):**
+  - Row 1: `100 + 200 + 300 = 600`
+  - Row 2: `200 + 300 + 400 = 900`
+  - Row 3: `300 + 400 + 500 = 1200`
+  - Row 4: `400 + 500 + 600 = 1500`
+  - Row 5: `500 + 600 + 700 = 1800`
+  - Row 6: `600 + 700 = 1300` *(only 1 following row available)*
+  - Row 7: `700` *(0 following rows available)*
+- **`centered_3` (1 preceding + current + 1 following):**
+  - Row 1: `100 + 200 = 300`
+  - Row 2: `100 + 200 + 300 = 600`
+  - Row 3: `200 + 300 + 400 = 900`
+  - Row 4: `300 + 400 + 500 = 1200`
+  - Row 5: `400 + 500 + 600 = 1500`
+  - Row 6: `500 + 600 + 700 = 1800`
+  - Row 7: `600 + 700 = 1300`
+- **`remaining_total` (Current row to end of table):**
+  - Row 1: `100 + 200 + ... + 700 = 2800` *(all rows)*
+  - Row 2: `200 + 300 + ... + 700 = 2700`
+  - Row 3: `300 + 400 + ... + 700 = 2500`
+  - Row 4: `400 + 500 + 600 + 700 = 2200`
+  - Row 5: `500 + 600 + 700 = 1800`
+  - Row 6: `600 + 700 = 1300`
+  - Row 7: `700`
+- **`full_partition`:** `2800` on every single row.
 
 ---
 
@@ -651,7 +773,7 @@ FROM employees ORDER BY salary DESC;
 
 ---
 
-### Challenge 2: 3-Row Moving Average
+### Challenge 2: 3-Row Moving Average (Lookback)
 
 ### Question
 Write a query showing each employee's `name`, `hire_date`, `salary`, and `moving_avg` —
@@ -707,6 +829,166 @@ Employee
 
 ---
 
+### Challenge 3: Forward-Looking Window — Next 2 Hires Salary Commitment
+
+### Question
+For workforce planning, calculate each employee's `upcoming_commitment`: the sum of the current employee's salary plus the next 2 employees hired after them (`ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING`), ordered by `hire_date`.
+
+Expected output:
+
+| name  | hire_date  | salary | upcoming_commitment |
+|-------|------------|--------|---------------------|
+| Eve   | 2018-11-05 | 75,000 | 230,000             |
+| Alice | 2019-01-15 | 95,000 | 220,000             |
+| Hank  | 2019-05-18 | 60,000 | 205,000             |
+| Ivy   | 2020-02-14 | 65,000 | 217,000             |
+| Bob   | 2020-03-10 | 80,000 | 232,000             |
+| Frank | 2020-07-22 | 72,000 | 220,000             |
+| Carol | 2021-06-01 | 80,000 | 218,000             |
+| Grace | 2021-12-01 | 68,000 | 200,000             |
+| Dave  | 2022-09-20 | 70,000 | 132,000             |
+| Jack  | 2023-01-10 | 62,000 | 62,000              |
+
+Notice:
+- Eve looks ahead at Alice and Hank: `75,000 + 95,000 + 60,000 = 230,000`
+- Dave only has Jack after him: `70,000 + 62,000 = 132,000`
+- Jack has no following rows: `62,000`
+
+### Answer
+
+```sql
+SELECT
+  name,
+  hire_date,
+  salary,
+  SUM(salary) OVER (
+    ORDER BY hire_date
+    ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING
+  ) AS upcoming_commitment
+FROM employees
+ORDER BY hire_date;
+```
+
+**Rails:**
+```ruby
+Employee
+  .select(
+    "name",
+    "hire_date",
+    "salary",
+    Arel.sql("SUM(salary) OVER (ORDER BY hire_date ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING) AS upcoming_commitment")
+  )
+  .order("hire_date")
+  .each { |e| puts "#{e.name} | #{e.hire_date} | #{e.salary} | #{e.upcoming_commitment}" }
+```
+
+---
+
+### Challenge 4: Centered Smoothing Window (1 Preceding and 1 Following)
+
+### Question
+To smooth out hiring salary spikes, calculate a 3-person centered average (`centered_avg`) that averages the previous hire, the current hire, and the next hire (`ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING`), ordered by `hire_date`. Round to nearest whole number.
+
+Expected output:
+
+| name  | hire_date  | salary | centered_avg |
+|-------|------------|--------|--------------|
+| Eve   | 2018-11-05 | 75,000 | 85,000       |
+| Alice | 2019-01-15 | 95,000 | 76,667       |
+| Hank  | 2019-05-18 | 60,000 | 73,333       |
+| Ivy   | 2020-02-14 | 65,000 | 68,333       |
+| Bob   | 2020-03-10 | 80,000 | 72,333       |
+| Frank | 2020-07-22 | 72,000 | 77,333       |
+| Carol | 2021-06-01 | 80,000 | 73,333       |
+| Grace | 2021-12-01 | 68,000 | 72,667       |
+| Dave  | 2022-09-20 | 70,000 | 66,667       |
+| Jack  | 2023-01-10 | 62,000 | 66,000       |
+
+Notice:
+- Eve has no preceding hire: `(75,000 + 95,000) / 2 = 85,000`
+- Alice is centered between Eve and Hank: `(75,000 + 95,000 + 60,000) / 3 = 76,667`
+- Jack has no following hire: `(70,000 + 62,000) / 2 = 66,000`
+
+### Answer
+
+```sql
+SELECT
+  name,
+  hire_date,
+  salary,
+  ROUND(AVG(salary) OVER (
+    ORDER BY hire_date
+    ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+  ), 0) AS centered_avg
+FROM employees
+ORDER BY hire_date;
+```
+
+**Rails:**
+```ruby
+Employee
+  .select(
+    "name",
+    "hire_date",
+    "salary",
+    Arel.sql("ROUND(AVG(salary) OVER (ORDER BY hire_date ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING), 0) AS centered_avg")
+  )
+  .order("hire_date")
+  .each { |e| puts "#{e.name} | #{e.hire_date} | #{e.salary} | #{e.centered_avg}" }
+```
+
+---
+
+### Challenge 5: Reverse Running Total (Remaining Payroll Suffix Sum)
+
+### Question
+Calculate `remaining_payroll` — the total salary liability from the current employee's hire date onward (`ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING`), ordered by `hire_date`.
+
+Expected output:
+
+| name  | hire_date  | salary | remaining_payroll |
+|-------|------------|--------|-------------------|
+| Eve   | 2018-11-05 | 75,000 | 727,000           |
+| Alice | 2019-01-15 | 95,000 | 652,000           |
+| Hank  | 2019-05-18 | 60,000 | 557,000           |
+| Ivy   | 2020-02-14 | 65,000 | 497,000           |
+| Bob   | 2020-03-10 | 80,000 | 432,000           |
+| Frank | 2020-07-22 | 72,000 | 352,000           |
+| Carol | 2021-06-01 | 80,000 | 280,000           |
+| Grace | 2021-12-01 | 68,000 | 200,000           |
+| Dave  | 2022-09-20 | 70,000 | 132,000           |
+| Jack  | 2023-01-10 | 62,000 | 62,000            |
+
+### Answer
+
+```sql
+SELECT
+  name,
+  hire_date,
+  salary,
+  SUM(salary) OVER (
+    ORDER BY hire_date
+    ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
+  ) AS remaining_payroll
+FROM employees
+ORDER BY hire_date;
+```
+
+**Rails:**
+```ruby
+Employee
+  .select(
+    "name",
+    "hire_date",
+    "salary",
+    Arel.sql("SUM(salary) OVER (ORDER BY hire_date ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS remaining_payroll")
+  )
+  .order("hire_date")
+  .each { |e| puts "#{e.name} | #{e.hire_date} | #{e.salary} | #{e.remaining_payroll}" }
+```
+
+---
+
 ## Complete Progress Tracker
 
 | Concept | Status |
@@ -725,6 +1007,9 @@ Employee
 | `LAST_VALUE` needs explicit full frame | ✅ |
 | `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` | ✅ |
 | `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` | ✅ |
-| Custom sliding frame `N PRECEDING AND CURRENT ROW` | ✅ |
+| Lookback sliding frame `N PRECEDING AND CURRENT ROW` | ✅ |
+| Lookahead sliding frame `CURRENT ROW AND N FOLLOWING` | ✅ |
+| Centered smoothing frame `N PRECEDING AND N FOLLOWING` | ✅ |
+| Reverse running total `CURRENT ROW AND UNBOUNDED FOLLOWING` | ✅ |
 | `AS` keyword is optional for aliases | ✅ |
 | Choosing ORDER BY column based on business logic | ⚠️ (improving) |
