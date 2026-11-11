@@ -59,7 +59,7 @@
 
 ### 🔴 Hard
 
-* [ ] 185 — Department Top Three Salaries *(DENSE_RANK)*
+* [x] 185 — Department Top Three Salaries *(DENSE_RANK)*
 * [ ] 262 — Trips and Users *(Multiple JOINs + rate calc)*
 * [ ] 569 — Median Employee Salary *(ROW_NUMBER / self JOIN)*
 * [ ] 571 — Find Median Given Frequency *(Complex median logic)*
@@ -95,10 +95,6 @@
 ---
 
 # Pattern 10 — Running Totals
-
-### Medium
-
-* [ ] 1204 — Last Person to Fit in the Bus
 
 ### Hard
 
